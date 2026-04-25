@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-background text-slate-300 font-sans antialiased overflow-x-hidden;
+    /* Deep space dot grid background overlay */
+    background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-syne text-white;
+  }
+}
+
+@layer components {
+  /* Glassmorphism cards */
+  .glass-card {
+    @apply bg-surface backdrop-blur-md border border-cyan-500/20 rounded-xl shadow-lg;
+    box-shadow: inset 0 0 20px rgba(0, 212, 255, 0.02);
+    transition: all 0.3s ease;
+  }
+  
+  .glass-card:hover {
+    @apply border-cyan-500/40;
+    box-shadow: inset 0 0 30px rgba(0, 212, 255, 0.05), 0 8px 30px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-background;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-cyan-500/30 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-cyan-500/60;
+  }
+
+  /* Table styling */
+  .data-table th {
+    @apply font-mono text-xs text-slate-400 uppercase tracking-wider px-4 py-3 text-left border-b border-white/10 bg-white/5;
+  }
+  .data-table td {
+    @apply font-mono text-sm px-4 py-3 border-b border-white/5;
+  }
+  .data-table tr:hover td {
+    @apply bg-white/5;
+  }
+
+  /* Interactive Elements */
+  .btn-primary {
+    @apply bg-cyan-500 text-black font-semibold px-4 py-2 rounded-lg hover:bg-cyan-400 focus:ring-2 focus:ring-cyan-500/50 focus:outline-none transition-colors;
+  }
+  
+  .btn-danger {
+    @apply bg-crimson-500/20 text-crimson-500 border border-crimson-500/50 hover:bg-crimson-500/30 font-semibold px-4 py-2 rounded-lg transition-colors;
+  }
+  
+  .btn-outline {
+    @apply border border-white/20 text-white hover:bg-white/10 font-semibold px-4 py-2 rounded-lg transition-colors;
+  }
+  
+  .input-field {
+    @apply bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white font-mono focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 focus:outline-none w-full transition-all;
+  }
+}
+
+/* Animations */
+@keyframes dash {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
