@@ -1,20 +1,41 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { fetchMaintenance } from "@/api/maintenance";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { fetchMaintenance, deleteMaintenance } from "@/api/maintenance";
 import { DataTable } from "@/components/ui/DataTable";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { LoadingSkeleton } from "@/components/ui/LoadingSkeleton";
 import { Timeline } from "@/components/ui/Timeline";
+import { AddMaintenanceDialog } from "@/components/ui/AddMaintenanceDialog";
 import { formatDate } from "@/lib/utils";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, Plus, Trash2 } from "lucide-react";
+import toast from "react-hot-toast";
 
 export function Maintenance() {
+  const queryClient = useQueryClient();
   const [selectedDroneId, setSelectedDroneId] = useState<number | null>(null);
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
 
   const { data: records, isLoading } = useQuery({
     queryKey: ['maintenance'],
     queryFn: fetchMaintenance,
   });
+
+  const deleteMutation = useMutation({
+    mutationFn: deleteMaintenance,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['maintenance'] });
+      toast.success("Maintenance record deleted");
+    },
+    onError: (err: any) => {
+      toast.error(err.response?.data?.error || "Failed to delete record");
+    }
+  });
+
+  const handleDelete = (id: number) => {
+    if (confirm("Are you sure you want to delete this maintenance record?")) {
+      deleteMutation.mutate(id);
+    }
+  };
 
   const overdueCount = records?.filter(r => {
     if (r.repairStatus !== 'PENDING') return false;
@@ -28,6 +49,16 @@ export function Maintenance() {
     { header: "Date", accessor: (row: any) => formatDate(row.maintenanceDate) },
     { header: "Issue", accessor: "issueReported" as const },
     { header: "Status", accessor: (row: any) => <StatusBadge status={row.repairStatus} /> },
+    { header: "Actions", accessor: (row: any) => (
+      <button 
+        onClick={() => handleDelete(row.id)}
+        disabled={deleteMutation.isPending}
+        className="text-slate-400 hover:text-red-400 transition-colors p-1"
+        title="Delete Record"
+      >
+        <Trash2 className="w-4 h-4" />
+      </button>
+    )},
   ];
 
   // For timeline
@@ -49,6 +80,12 @@ export function Maintenance() {
           <h1 className="font-syne text-2xl font-bold text-white mb-2">Maintenance Records</h1>
           <p className="text-slate-400 text-sm font-mono">Service history and repair logs for fleet assets.</p>
         </div>
+        <button 
+          onClick={() => setIsAddDialogOpen(true)}
+          className="btn-primary flex items-center gap-2 text-sm"
+        >
+          <Plus className="w-4 h-4" /> Log Maintenance
+        </button>
       </div>
 
       {overdueCount > 0 && (
@@ -91,6 +128,11 @@ export function Maintenance() {
           )}
         </div>
       </div>
+
+      <AddMaintenanceDialog
+        open={isAddDialogOpen}
+        onClose={() => setIsAddDialogOpen(false)}
+      />
     </div>
   );
 }

@@ -27,6 +27,17 @@ router.get('/', async (req, res) => {
   }
 });
 
+// GET /api/flights/:id — get one flight log
+router.get('/:id', async (req, res) => {
+  try {
+    const [flight] = await db.select().from(flightLogs).where(eq(flightLogs.id, Number(req.params.id)));
+    if (!flight) return res.status(404).json({ error: 'Flight not found' });
+    res.json(flight);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // POST /api/flights — create flight log (fires trg_battery_drain_on_flight)
 router.post('/', async (req, res) => {
   try {
@@ -58,6 +69,19 @@ router.put('/:id', async (req, res) => {
 
     if (!updated) return res.status(404).json({ error: 'Flight not found' });
     res.json(updated);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// DELETE /api/flights/:id — delete flight log
+router.delete('/:id', async (req, res) => {
+  try {
+    const [deleted] = await db.delete(flightLogs)
+      .where(eq(flightLogs.id, Number(req.params.id)))
+      .returning();
+    if (!deleted) return res.status(404).json({ error: 'Flight not found' });
+    res.json(deleted);
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }

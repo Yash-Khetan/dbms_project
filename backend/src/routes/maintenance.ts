@@ -15,6 +15,17 @@ router.get('/', async (_req, res) => {
   }
 });
 
+// GET /api/maintenance/:id — get one record
+router.get('/:id', async (req, res) => {
+  try {
+    const [record] = await db.select().from(maintenanceRecords).where(eq(maintenanceRecords.id, Number(req.params.id)));
+    if (!record) return res.status(404).json({ error: 'Maintenance record not found' });
+    res.json(record);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // POST /api/maintenance — create
 router.post('/', async (req, res) => {
   try {

@@ -15,6 +15,17 @@ router.get('/', async (_req, res) => {
   }
 });
 
+// GET /api/operators/:id — get one operator
+router.get('/:id', async (req, res) => {
+  try {
+    const [operator] = await db.select().from(operators).where(eq(operators.id, Number(req.params.id)));
+    if (!operator) return res.status(404).json({ error: 'Operator not found' });
+    res.json(operator);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // POST /api/operators — create operator
 router.post('/', async (req, res) => {
   try {

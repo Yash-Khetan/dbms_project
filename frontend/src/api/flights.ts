@@ -35,3 +35,9 @@ export const updateFlight = async (flight: Partial<FlightLog>): Promise<FlightLo
     body: JSON.stringify(flight),
   });
 };
+
+export const deleteFlight = async (id: number): Promise<void> => {
+  return apiFetch<void>(`/flights/${id}`, {
+    method: 'DELETE',
+  });
+};

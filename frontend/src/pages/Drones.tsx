@@ -6,6 +6,7 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { BatteryBar } from "@/components/ui/BatteryBar";
 import { LoadingSkeleton } from "@/components/ui/LoadingSkeleton";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
+import { AddDroneDialog } from "@/components/ui/AddDroneDialog";
 import { Trash2, Plus } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -13,6 +14,7 @@ export function Drones() {
   const queryClient = useQueryClient();
   const [statusFilter, setStatusFilter] = useState("ALL");
   const [droneToDelete, setDroneToDelete] = useState<number | null>(null);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   const { data: drones, isLoading } = useQuery({
     queryKey: ['drones'],
@@ -60,7 +62,7 @@ export function Drones() {
           <h1 className="font-syne text-2xl font-bold text-white mb-2">Drone Fleet</h1>
           <p className="text-slate-400 text-sm font-mono">Manage and monitor all active aerospace assets.</p>
         </div>
-        <button className="btn-primary flex items-center gap-2" onClick={() => toast.error("Not implemented in demo")}>
+        <button className="btn-primary flex items-center gap-2" onClick={() => setIsAddModalOpen(true)}>
           <Plus size={16} /> Add Drone
         </button>
       </div>
@@ -95,6 +97,11 @@ export function Drones() {
         }}
         title="Delete Drone"
         message="Are you sure you want to delete this drone? This action cannot be undone and will remove all associated flight logs and maintenance records."
+      />
+
+      <AddDroneDialog
+        open={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
       />
     </div>
   );

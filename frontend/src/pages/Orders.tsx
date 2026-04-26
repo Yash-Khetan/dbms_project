@@ -1,18 +1,21 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchOrders, assignDrone } from "@/api/orders";
+import { fetchOrders, assignDrone, deleteOrder } from "@/api/orders";
 import { fetchDrones } from "@/api/drones";
 import { DataTable } from "@/components/ui/DataTable";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { LoadingSkeleton } from "@/components/ui/LoadingSkeleton";
 import { SlideOver } from "@/components/ui/SlideOver";
+import { AddOrderDialog } from "@/components/ui/AddOrderDialog";
 import { formatDateTime } from "@/lib/utils";
+import { Plus, Trash2 } from "lucide-react";
 import toast from "react-hot-toast";
 
 export function Orders() {
   const queryClient = useQueryClient();
   const [statusFilter, setStatusFilter] = useState("ALL");
   const [assigningOrder, setAssigningOrder] = useState<number | null>(null);
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
 
   const { data: orders, isLoading: ordersLoading } = useQuery({
     queryKey: ['orders'],
@@ -37,6 +40,23 @@ export function Orders() {
     }
   });
 
+  const deleteMutation = useMutation({
+    mutationFn: deleteOrder,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['orders'] });
+      toast.success("Order deleted successfully");
+    },
+    onError: (err: any) => {
+      toast.error(err.response?.data?.error || "Failed to delete order");
+    }
+  });
+
+  const handleDelete = (id: number) => {
+    if (confirm("Are you sure you want to delete this order?")) {
+      deleteMutation.mutate(id);
+    }
+  };
+
   const filteredOrders = orders?.filter(o => 
     statusFilter === "ALL" || o.status === statusFilter
   ) || [];
@@ -51,18 +71,29 @@ export function Orders() {
     { header: "Status", accessor: (row: any) => <StatusBadge status={row.status} /> },
     { header: "Created", accessor: (row: any) => formatDateTime(row.createdAt) },
     { header: "Actions", accessor: (row: any) => (
-      row.status === 'PENDING' ? (
-        <button 
-          onClick={() => setAssigningOrder(row.id)}
-          className="text-xs btn-outline py-1 px-2 border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10"
+      <div className="flex items-center gap-2">
+        {row.status === 'PENDING' && (
+          <button 
+            onClick={() => setAssigningOrder(row.id)}
+            className="text-xs btn-outline py-1 px-2 border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10"
+          >
+            Assign Drone
+          </button>
+        )}
+        {row.assignedDroneId && row.status !== 'PENDING' && (
+          <span className="text-xs text-slate-500 font-mono">
+            Drone #{row.assignedDroneId}
+          </span>
+        )}
+        <button
+          onClick={() => handleDelete(row.id)}
+          disabled={deleteMutation.isPending}
+          className="text-slate-400 hover:text-red-400 transition-colors p-1"
+          title="Delete Order"
         >
-          Assign Drone
+          <Trash2 className="w-4 h-4" />
         </button>
-      ) : (
-        <span className="text-xs text-slate-500 font-mono">
-          {row.assignedDroneId ? `Drone #${row.assignedDroneId}` : '—'}
-        </span>
-      )
+      </div>
     )},
   ];
 
@@ -75,6 +106,12 @@ export function Orders() {
           <h1 className="font-syne text-2xl font-bold text-white mb-2">Delivery Orders</h1>
           <p className="text-slate-400 text-sm font-mono">Manage customer delivery queue and dispatch logistics.</p>
         </div>
+        <button 
+          onClick={() => setIsAddDialogOpen(true)}
+          className="btn-primary flex items-center gap-2 text-sm"
+        >
+          <Plus className="w-4 h-4" /> New Order
+        </button>
       </div>
 
       <div className="flex gap-2">
@@ -135,6 +172,11 @@ export function Orders() {
           )}
         </div>
       </SlideOver>
+
+      <AddOrderDialog
+        open={isAddDialogOpen}
+        onClose={() => setIsAddDialogOpen(false)}
+      />
     </div>
   );
 }

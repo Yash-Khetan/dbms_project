@@ -1,14 +1,37 @@
-import { useQuery } from "@tanstack/react-query";
-import { fetchOperators } from "@/api/operators";
+import { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { fetchOperators, deleteOperator } from "@/api/operators";
 import { DataTable } from "@/components/ui/DataTable";
 import { LoadingSkeleton } from "@/components/ui/LoadingSkeleton";
-import { Shield } from "lucide-react";
+import { Shield, Plus, Trash2 } from "lucide-react";
+import { AddOperatorDialog } from "@/components/ui/AddOperatorDialog";
+import toast from "react-hot-toast";
 
 export function Operators() {
+  const queryClient = useQueryClient();
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+
   const { data: operators, isLoading } = useQuery({
     queryKey: ['operators'],
     queryFn: fetchOperators,
   });
+
+  const deleteMutation = useMutation({
+    mutationFn: deleteOperator,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['operators'] });
+      toast.success("Operator deleted successfully");
+    },
+    onError: (err: any) => {
+      toast.error(err.response?.data?.error || "Failed to delete operator");
+    }
+  });
+
+  const handleDelete = (id: number) => {
+    if (confirm("Are you sure you want to delete this operator?")) {
+      deleteMutation.mutate(id);
+    }
+  };
 
   const getExperienceColor = (level: string) => {
     switch(level) {
@@ -36,6 +59,16 @@ export function Operators() {
       </span>
     )},
     { header: "Total Flights", accessor: (row: any) => <span className="font-mono">{row.totalFlights}</span> },
+    { header: "Actions", accessor: (row: any) => (
+      <button 
+        onClick={() => handleDelete(row.id)}
+        disabled={deleteMutation.isPending}
+        className="text-slate-400 hover:text-red-400 transition-colors p-1"
+        title="Delete Operator"
+      >
+        <Trash2 className="w-4 h-4" />
+      </button>
+    )},
   ];
 
   return (
@@ -45,6 +78,12 @@ export function Operators() {
           <h1 className="font-syne text-2xl font-bold text-white mb-2">Operators</h1>
           <p className="text-slate-400 text-sm font-mono">Licensed remote pilots and dispatch personnel.</p>
         </div>
+        <button 
+          onClick={() => setIsAddDialogOpen(true)}
+          className="btn-primary flex items-center gap-2 text-sm"
+        >
+          <Plus className="w-4 h-4" /> Add Operator
+        </button>
       </div>
 
       {isLoading ? (
@@ -52,6 +91,11 @@ export function Operators() {
       ) : (
         <DataTable data={operators || []} columns={columns} keyExtractor={(o) => o.id} />
       )}
+
+      <AddOperatorDialog 
+        open={isAddDialogOpen} 
+        onClose={() => setIsAddDialogOpen(false)} 
+      />
     </div>
   );
 }

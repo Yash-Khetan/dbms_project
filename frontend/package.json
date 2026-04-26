@@ -15,15 +15,13 @@
     "@fontsource/syne": "latest",
     "@tanstack/react-query": "^5",
     "canvas-confetti": "^1",
-    "clsx": "^2.1.1",
     "framer-motion": "^11",
     "lucide-react": "latest",
     "react": "^18",
     "react-dom": "^18",
     "react-hot-toast": "^2",
     "react-router-dom": "^6",
-    "react-syntax-highlighter": "^15",
-    "tailwind-merge": "^3.5.0"
+    "react-syntax-highlighter": "^15"
   },
   "devDependencies": {
     "@types/canvas-confetti": "latest",
@@ -32,7 +30,7 @@
     "@types/react-syntax-highlighter": "latest",
     "@typescript-eslint/eslint-plugin": "^7.15.0",
     "@typescript-eslint/parser": "^7.15.0",
-    "@vitejs/plugin-react": "^4.3.4",
+    "@vitejs/plugin-react": "latest",
     "autoprefixer": "latest",
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.2",
@@ -40,6 +38,6 @@
     "postcss": "latest",
     "tailwindcss": "^3",
     "typescript": "^5",
-    "vite": "^5.4.11"
+    "vite": "^6"
   }
 }
