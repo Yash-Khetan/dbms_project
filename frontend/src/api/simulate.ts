@@ -35,6 +35,18 @@ export const simulateSetBattery = async (droneId: number, batteryLevel: number):
   });
 };
 
-export const fetchTriggerSQL = async (): Promise<{ batteryDrain: string; completeDelivery: string; lowBattery: string }> => {
-  return apiFetch<{ batteryDrain: string; completeDelivery: string; lowBattery: string }>('/simulate/trigger-sql');
+export interface TriggerSQLData {
+  beforeInsertDrone: string;
+  afterInsertDrone: string;
+  beforeUpdateDrone: string;
+  afterUpdateDrone: string;
+  beforeDeleteDrone: string;
+  afterDeleteDrone: string;
+  batteryDrain: string;
+  completeDelivery: string;
+}
+
+export const fetchTriggerSQL = async (): Promise<TriggerSQLData> => {
+  return apiFetch<TriggerSQLData>('/simulate/trigger-sql');
 };
+

@@ -20,14 +20,16 @@ export function AddDroneDialog({ open, onClose }: AddDroneDialogProps) {
     mutationFn: createDrone,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['drones'] });
-      toast.success("Drone added successfully");
+      queryClient.invalidateQueries({ queryKey: ['maintenance'] });
+      toast.success("Drone added! Initial maintenance check auto-created by trigger.");
       setModel("");
       setBatteryLevel(100);
       setStatus("AVAILABLE");
       onClose();
     },
     onError: (err: any) => {
-      toast.error(err.response?.data?.error || "Failed to add drone");
+      const msg = err.response?.data?.error || "Failed to add drone";
+      toast.error(msg, { duration: 5000 });
     }
   });
 

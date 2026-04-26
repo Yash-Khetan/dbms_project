@@ -25,10 +25,14 @@ export function Drones() {
     mutationFn: deleteDrone,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['drones'] });
-      toast.success("Drone deleted successfully");
+      queryClient.invalidateQueries({ queryKey: ['maintenance'] });
+      toast.success("Drone deleted successfully. Check Maintenance for audit log.");
+      setDroneToDelete(null);
     },
     onError: (err: any) => {
-      toast.error(err.response?.data?.error || "Failed to delete drone");
+      setDroneToDelete(null);
+      const msg = err.response?.data?.error || "Failed to delete drone";
+      toast.error(msg, { duration: 5000 });
     }
   });
 

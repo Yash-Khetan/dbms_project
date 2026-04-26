@@ -2,7 +2,12 @@ import { Router } from 'express';
 import { db } from '../db/index.js';
 import { drones, flightLogs, orders, operators } from '../db/schema.js';
 import { eq } from 'drizzle-orm';
-import { batteryDrainSQL, completeDeliverySQL, lowBatterySQL } from '../triggers.js';
+import {
+  batteryDrainSQL, completeDeliverySQL,
+  beforeInsertDroneSQL, afterInsertDroneSQL,
+  beforeUpdateDroneSQL, afterUpdateDroneSQL,
+  beforeDeleteDroneSQL, afterDeleteDroneSQL,
+} from '../triggers.js';
 
 const router = Router();
 
@@ -98,9 +103,16 @@ router.post('/set-battery', async (req, res) => {
 // GET /api/simulate/trigger-sql — return trigger SQL for frontend code blocks
 router.get('/trigger-sql', (_req, res) => {
   res.json({
+    // Drone triggers
+    beforeInsertDrone: beforeInsertDroneSQL,
+    afterInsertDrone: afterInsertDroneSQL,
+    beforeUpdateDrone: beforeUpdateDroneSQL,
+    afterUpdateDrone: afterUpdateDroneSQL,
+    beforeDeleteDrone: beforeDeleteDroneSQL,
+    afterDeleteDrone: afterDeleteDroneSQL,
+    // Flight triggers
     batteryDrain: batteryDrainSQL,
     completeDelivery: completeDeliverySQL,
-    lowBattery: lowBatterySQL,
   });
 });
 
