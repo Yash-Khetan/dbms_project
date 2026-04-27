@@ -1,9 +1,17 @@
 import 'dotenv/config';
 import { db } from './index';
-import { drones, operators, orders, maintenanceRecords } from './schema';
+import { drones, operators, orders, maintenanceRecords, flightLogs } from './schema';
 
 async function seed() {
   console.log('🌱 Seeding database...\n');
+
+  // Clean existing data (order matters for foreign keys)
+  await db.delete(flightLogs);
+  await db.delete(maintenanceRecords);
+  await db.delete(orders);
+  await db.delete(operators);
+  await db.delete(drones);
+  console.log('  🧹 Cleared existing data');
 
   // Seed drones
   const droneData = [

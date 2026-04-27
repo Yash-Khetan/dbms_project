@@ -241,6 +241,34 @@ async function createTriggers() {
   console.log('  ✅ trg_complete_delivery');
 
   console.log('\n✨ All 8 triggers created successfully!');
+
+  // ──────────────────────────────────────────────────────────
+  // PostgreSQL VIEW: fleet_overview
+  // Joins drones + active orders + maintenance history
+  // ──────────────────────────────────────────────────────────
+  await client.unsafe(`
+    CREATE OR REPLACE VIEW fleet_overview AS
+    SELECT
+      d.id              AS drone_id,
+      d.model           AS drone_model,
+      d.battery_level,
+      d.status          AS drone_status,
+      d.last_maintenance,
+      COUNT(DISTINCT o.id) FILTER (WHERE o.status IN ('PENDING','ASSIGNED','IN_TRANSIT'))
+                        AS active_orders,
+      COUNT(DISTINCT m.id)
+                        AS total_maintenance_records,
+      MAX(m.maintenance_date)
+                        AS latest_maintenance_date
+    FROM drones d
+    LEFT JOIN orders o            ON o.assigned_drone_id = d.id
+    LEFT JOIN maintenance_records m ON m.drone_id = d.id
+    GROUP BY d.id, d.model, d.battery_level, d.status, d.last_maintenance
+    ORDER BY d.id;
+  `);
+  console.log('  ✅ VIEW fleet_overview created');
+
+  console.log('\n🎉 All triggers + view created successfully!');
   await client.end();
 }
 

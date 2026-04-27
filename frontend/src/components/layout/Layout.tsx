@@ -7,16 +7,16 @@ export function Layout() {
   const location = useLocation();
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex min-h-screen bg-background overflow-hidden">
       <Sidebar />
-      <main className="flex-1 ml-64 p-8 relative">
+      <main className="flex-1 ml-64 p-8 relative overflow-y-auto overflow-x-hidden h-screen">
         <motion.div
           key={location.pathname}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
           transition={{ duration: 0.3 }}
-          className="max-w-7xl mx-auto"
+          className="max-w-[calc(100vw-18rem)] mx-auto"
         >
           <Outlet />
         </motion.div>

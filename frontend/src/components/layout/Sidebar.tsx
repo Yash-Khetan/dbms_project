@@ -6,7 +6,7 @@ export function Sidebar() {
   const location = useLocation();
   
   const navItems = [
-    { name: "Dashboard", path: "/", icon: <Activity size={20} /> },
+    { name: "Dashboard", path: "/dashboard", icon: <Activity size={20} /> },
     { name: "Drone Fleet", path: "/drones", icon: <Plane size={20} /> },
     { name: "Orders", path: "/orders", icon: <Package size={20} /> },
     { name: "Operators", path: "/operators", icon: <Users size={20} /> },

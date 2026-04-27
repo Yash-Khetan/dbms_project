@@ -62,5 +62,14 @@ router.get('/dashboard', async (_req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+// GET /api/stats/fleet-overview — query the fleet_overview VIEW
+router.get('/fleet-overview', async (_req, res) => {
+  try {
+    const rows = await db.execute(sql`SELECT * FROM fleet_overview`);
+    res.json(rows);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 export default router;

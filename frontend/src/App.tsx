@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Layout } from './components/layout/Layout';
 
-// Pages
+import { Landing } from './pages/Landing';
 import { Dashboard } from './pages/Dashboard';
 import { Drones } from './pages/Drones';
 import { Orders } from './pages/Orders';
@@ -15,8 +15,9 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<Landing />} />
         <Route element={<Layout />}>
-          <Route path="/" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/drones" element={<Drones />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/operators" element={<Operators />} />
