@@ -74,7 +74,7 @@ export function AddOrderDialog({ open, onClose }: AddOrderDialogProps) {
                   value={customerName}
                   onChange={(e) => setCustomerName(e.target.value)}
                   placeholder="e.g. John Smith"
-                  className="w-full bg-background/50 border border-white/10 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-cyan-500/50"
+                  className="input-field text-sm"
                   required
                 />
               </div>
@@ -86,7 +86,7 @@ export function AddOrderDialog({ open, onClose }: AddOrderDialogProps) {
                   onChange={(e) => setDeliveryAddress(e.target.value)}
                   placeholder="e.g. 123 Main St, Apt 4B, New York, NY 10001"
                   rows={2}
-                  className="w-full bg-background/50 border border-white/10 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-cyan-500/50 resize-none"
+                  className="input-field text-sm resize-none"
                   required
                 />
               </div>
@@ -100,7 +100,7 @@ export function AddOrderDialog({ open, onClose }: AddOrderDialogProps) {
                   step="0.01"
                   value={packageWeightKg}
                   onChange={(e) => setPackageWeightKg(e.target.value)}
-                  className="w-full bg-background/50 border border-white/10 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-cyan-500/50"
+                  className="input-field text-sm"
                   required
                 />
               </div>

@@ -1,14 +1,14 @@
 import { Router } from 'express';
 import { db } from '../db/index.js';
 import { maintenanceRecords } from '../db/schema.js';
-import { eq } from 'drizzle-orm';
+import { eq, desc } from 'drizzle-orm';
 
 const router = Router();
 
 // GET /api/maintenance — list all
 router.get('/', async (_req, res) => {
   try {
-    const all = await db.select().from(maintenanceRecords).orderBy(maintenanceRecords.maintenanceDate);
+    const all = await db.select().from(maintenanceRecords).orderBy(desc(maintenanceRecords.id));
     res.json(all);
   } catch (err: any) {
     res.status(500).json({ error: err.message });

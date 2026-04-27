@@ -32,6 +32,7 @@ export function Orders() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['orders'] });
       queryClient.invalidateQueries({ queryKey: ['drones'] });
+      queryClient.invalidateQueries({ queryKey: ['dashboardStats'] });
       setAssigningOrder(null);
       toast.success("Drone assigned successfully");
     },

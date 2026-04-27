@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { db } from '../db/index.js';
 import { orders, drones } from '../db/schema.js';
-import { eq } from 'drizzle-orm';
+import { eq, desc } from 'drizzle-orm';
 
 const router = Router();
 
@@ -11,10 +11,11 @@ router.get('/', async (req, res) => {
     const { status } = req.query;
     if (status && typeof status === 'string') {
       const filtered = await db.select().from(orders)
-        .where(eq(orders.status, status as any));
+        .where(eq(orders.status, status as any))
+        .orderBy(desc(orders.id));
       return res.json(filtered);
     }
-    const all = await db.select().from(orders).orderBy(orders.createdAt);
+    const all = await db.select().from(orders).orderBy(desc(orders.id));
     res.json(all);
   } catch (err: any) {
     res.status(500).json({ error: err.message });
@@ -101,6 +102,11 @@ router.post('/:id/assign', async (req, res) => {
       .set({ assignedDroneId: droneId, status: 'ASSIGNED' })
       .where(eq(orders.id, Number(req.params.id)))
       .returning();
+
+    // Update drone status so it is no longer available
+    await db.update(drones)
+      .set({ status: 'IN_DELIVERY' })
+      .where(eq(drones.id, droneId));
 
     if (!updated) return res.status(404).json({ error: 'Order not found' });
     res.json(updated);

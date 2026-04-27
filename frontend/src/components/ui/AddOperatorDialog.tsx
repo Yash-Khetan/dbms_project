@@ -74,7 +74,7 @@ export function AddOperatorDialog({ open, onClose }: AddOperatorDialogProps) {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="e.g. Jane Doe"
-                  className="w-full bg-background/50 border border-white/10 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-cyan-500/50"
+                  className="input-field text-sm"
                   required
                 />
               </div>
@@ -86,7 +86,7 @@ export function AddOperatorDialog({ open, onClose }: AddOperatorDialogProps) {
                   value={licenseNumber}
                   onChange={(e) => setLicenseNumber(e.target.value)}
                   placeholder="e.g. PILOT-12345"
-                  className="w-full bg-background/50 border border-white/10 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-cyan-500/50"
+                  className="input-field text-sm"
                   required
                 />
               </div>
@@ -96,7 +96,7 @@ export function AddOperatorDialog({ open, onClose }: AddOperatorDialogProps) {
                 <select
                   value={experienceLevel}
                   onChange={(e) => setExperienceLevel(e.target.value as any)}
-                  className="w-full bg-background/50 border border-white/10 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-cyan-500/50"
+                  className="input-field text-sm"
                 >
                   <option value="JUNIOR">Junior</option>
                   <option value="INTERMEDIATE">Intermediate</option>

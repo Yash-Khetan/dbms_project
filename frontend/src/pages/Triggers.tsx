@@ -130,7 +130,7 @@ export function Triggers() {
       <div>
         <h1 className="font-syne text-3xl font-bold text-white mb-2 uppercase tracking-widest">Database Trigger Simulation</h1>
         <p className="text-slate-400 text-sm font-mono max-w-2xl">
-          Live demonstration of 8 PostgreSQL PL/pgSQL triggers — 6 on the <span className="text-cyan-400">drones</span> table and 2 on <span className="text-cyan-400">flight_logs</span>. Actions here directly mutate the database.
+          Live demonstration of 8 triggers with actions which directly mutate the database.
         </p>
       </div>
 

@@ -82,7 +82,7 @@ export function AddMaintenanceDialog({ open, onClose }: AddMaintenanceDialogProp
                 <select
                   value={droneId}
                   onChange={(e) => setDroneId(e.target.value ? Number(e.target.value) : "")}
-                  className="w-full bg-background/50 border border-white/10 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-cyan-500/50"
+                  className="input-field text-sm"
                   required
                 >
                   <option value="" disabled>Select a drone</option>
@@ -99,7 +99,7 @@ export function AddMaintenanceDialog({ open, onClose }: AddMaintenanceDialogProp
                   onChange={(e) => setIssueReported(e.target.value)}
                   placeholder="e.g. Motor 3 vibration anomaly detected"
                   rows={2}
-                  className="w-full bg-background/50 border border-white/10 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-cyan-500/50 resize-none"
+                  className="input-field text-sm resize-none"
                   required
                 />
               </div>
@@ -111,7 +111,7 @@ export function AddMaintenanceDialog({ open, onClose }: AddMaintenanceDialogProp
                   onChange={(e) => setTechnicianNotes(e.target.value)}
                   placeholder="e.g. Scheduled for bearing replacement"
                   rows={2}
-                  className="w-full bg-background/50 border border-white/10 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-cyan-500/50 resize-none"
+                  className="input-field text-sm resize-none"
                 />
               </div>
 

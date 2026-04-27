@@ -70,6 +70,12 @@
   .input-field {
     @apply bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white font-mono focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 focus:outline-none w-full transition-all;
   }
+
+  /* Fix for select dropdown options in dark mode */
+  select option {
+    background-color: #080D1A;
+    color: #ffffff;
+  }
 }
 
 /* Animations */

@@ -11,6 +11,14 @@ Features a futuristic aerospace mission control design, real-time database simul
 
 ---
 
+## Latest Updates (Final Polish)
+- **Interactive State Toggling**: Added `CHARGING` / `AVAILABLE` toggle buttons directly to Drone Cards on the Dashboard and Fleet pages.
+- **Enhanced Data Integrity**: API-level validation added to prevent registering multiple drones with the same exact model name.
+- **Improved UX**: Auto-sorting all Maintenance Records and Recent Orders to descending order (newest first) by default.
+- **Flight Simulation Fix**: Active orders are now properly linked and auto-marked as `DELIVERED` the moment a simulated flight completes.
+
+---
+
 ## Prerequisites
 - Node.js 18+
 - pgAdmin installed and running

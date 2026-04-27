@@ -46,6 +46,13 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const { model, batteryLevel, status, lastMaintenance } = req.body;
+    
+    // Check if drone with same model already exists
+    const [existingDrone] = await db.select().from(drones).where(eq(drones.model, model));
+    if (existingDrone) {
+      return res.status(400).json({ error: 'A drone with this name already exists in the fleet' });
+    }
+
     const [created] = await db.insert(drones).values({
       model,
       batteryLevel: batteryLevel ?? 100,

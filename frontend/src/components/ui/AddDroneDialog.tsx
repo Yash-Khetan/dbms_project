@@ -76,7 +76,7 @@ export function AddDroneDialog({ open, onClose }: AddDroneDialogProps) {
                   value={model}
                   onChange={(e) => setModel(e.target.value)}
                   placeholder="e.g. DJI Mavic 3 Enterprise"
-                  className="w-full bg-background/50 border border-white/10 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-cyan-500/50"
+                  className="input-field text-sm"
                   required
                 />
               </div>
@@ -89,7 +89,7 @@ export function AddDroneDialog({ open, onClose }: AddDroneDialogProps) {
                   max="100"
                   value={batteryLevel}
                   onChange={(e) => setBatteryLevel(Number(e.target.value))}
-                  className="w-full bg-background/50 border border-white/10 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-cyan-500/50"
+                  className="input-field text-sm"
                   required
                 />
               </div>
@@ -99,7 +99,7 @@ export function AddDroneDialog({ open, onClose }: AddDroneDialogProps) {
                 <select
                   value={status}
                   onChange={(e) => setStatus(e.target.value as any)}
-                  className="w-full bg-background/50 border border-white/10 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-cyan-500/50"
+                  className="input-field text-sm"
                 >
                   <option value="AVAILABLE">Available</option>
                   <option value="IN_DELIVERY">In Delivery</option>

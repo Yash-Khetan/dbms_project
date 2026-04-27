@@ -24,10 +24,14 @@ router.post('/battery-drain', async (req, res) => {
       return res.status(400).json({ error: 'No operators exist — create one first' });
     }
 
+    // Find if there is an active order assigned to this drone
+    const [activeOrder] = await db.select().from(orders).where(eq(orders.assignedDroneId, Number(droneId)));
+
     // Insert flight log — this fires the battery drain trigger
     await db.insert(flightLogs).values({
       droneId: Number(droneId),
       operatorId: allOperators[0].id,
+      orderId: activeOrder ? activeOrder.id : undefined,
     });
 
     // Re-fetch drone to get updated state
