@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://localhost:3001/api';
+export const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
 /**
  * A native fetch wrapper that throws an error object shaped like an Axios error
@@ -6,7 +6,7 @@ export const BASE_URL = 'http://localhost:3001/api';
  */
 export async function apiFetch<T>(endpoint: string, options?: RequestInit): Promise<T> {
   const url = `${BASE_URL}${endpoint}`;
-  
+
   const headers = new Headers(options?.headers);
   if (!headers.has('Content-Type') && options?.body) {
     headers.set('Content-Type', 'application/json');
