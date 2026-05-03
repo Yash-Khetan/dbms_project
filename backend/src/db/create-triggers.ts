@@ -3,11 +3,12 @@ import postgres from 'postgres';
 
 async function createTriggers() {
   const client = postgres({
-    host:     process.env.DB_HOST!,
-    port:     Number(process.env.DB_PORT!),
-    user:     process.env.DB_USER!,
+    host: process.env.DB_HOST!,
+    port: Number(process.env.DB_PORT!),
+    user: process.env.DB_USER!,
     password: process.env.DB_PASSWORD!,
     database: process.env.DB_NAME!,
+    ssl: 'require'
   });
 
   console.log('🔧 Creating PostgreSQL triggers...\n');
